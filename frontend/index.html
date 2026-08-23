@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DocSummary AI — Intelligent Document Summarizer</title>
+  <meta name="description"
+        content="Upload any PDF or scanned image and get AI-powered smart summaries, key points, and improvement suggestions instantly." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Background Decoration ─────────────────────────────────────────── -->
+  <div class="bg-orb bg-orb--1" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--2" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--3" aria-hidden="true"></div>
+
+  <!-- ── Header ────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header__inner">
+      <div class="header__brand">
+        <div class="header__logo" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="10" fill="url(#logoGrad)"/>
+            <path d="M8 10h16M8 14h12M8 18h14M8 22h10" stroke="white" stroke-width="2"
+                  stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="5" fill="url(#aiGrad)"/>
+            <path d="M22 22l1.5 1.5L26 20" stroke="white" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32">
+                <stop stop-color="#059669"/>
+                <stop offset="1" stop-color="#14b8a6"/>
+              </linearGradient>
+              <linearGradient id="aiGrad" x1="19" y1="17" x2="29" y2="27">
+                <stop stop-color="#f59e0b"/>
+                <stop offset="1" stop-color="#10b981"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <h1 class="header__title">DocSummary <span class="header__ai">AI</span></h1>
+          <p class="header__sub">Intelligent Document Summarizer</p>
+        </div>
+      </div>
+
+
+    </div>
+  </header>
+
+
+
+  <!-- ── Main Content ───────────────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- Upload Section -->
+    <section class="section upload-section" id="upload-section">
+      <div class="section__intro">
+        <h2 class="section__heading">Upload Your Document</h2>
+        <p class="section__sub">Supports PDF files and scanned images (JPEG, PNG, TIFF, WEBP)</p>
+      </div>
+
+      <!-- Drop Zone -->
+      <div id="drop-zone" class="drop-zone" role="button" tabindex="0"
+           aria-label="Drop zone: click or drag a file here">
+        <div class="drop-zone__icon" aria-hidden="true">
+          <img src="drag_drop_icon.jpg" alt="Upload Document" class="drop-zone__img-logo">
+        </div>
+        <p class="drop-zone__primary">Drag and drop your document here</p>
+        <p class="drop-zone__secondary">or click to browse your local files</p>
+        <div class="drop-zone__chips">
+          <span class="chip chip--pdf">PDF</span>
+          <span class="chip chip--png">PNG</span>
+          <span class="chip chip--jpg">JPG</span>
+          <span class="chip chip--webp">WEBP</span>
+          <span class="chip chip--tiff">TIFF</span>
+        </div>
+        <p class="drop-zone__limit">Supports files up to 20 MB</p>
+        <input id="file-input" type="file"
+               accept="application/pdf,image/jpeg,image/png,image/tiff,image/webp,image/bmp,image/gif"
+               class="visually-hidden" aria-label="File upload input" />
+      </div>
+
+      <!-- Selected file preview -->
+      <div id="file-preview" class="file-preview" hidden>
+        <div class="file-preview__icon" id="preview-icon" aria-hidden="true"></div>
+        <div class="file-preview__info">
+          <p class="file-preview__name" id="preview-name"></p>
+          <p class="file-preview__meta" id="preview-meta"></p>
+        </div>
+        <button id="remove-file" class="btn btn--ghost btn--sm btn--danger"
+                aria-label="Remove selected file">Remove</button>
+      </div>
+
+      <!-- Summary Options -->
+      <div class="options-row" id="options-row">
+        <div class="options-group">
+          <span class="options-label">Summary Length</span>
+          <div class="length-selector" role="group" aria-label="Summary length options">
+            <input type="radio" id="len-short"  name="summary-length" value="short"  class="visually-hidden" />
+            <label for="len-short"  class="length-btn">Short</label>
+
+            <input type="radio" id="len-medium" name="summary-length" value="medium" class="visually-hidden" checked />
+            <label for="len-medium" class="length-btn length-btn--active">Medium</label>
+
+            <input type="radio" id="len-long"   name="summary-length" value="long"   class="visually-hidden" />
+            <label for="len-long"   class="length-btn">Long</label>
+          </div>
+        </div>
+      </div>
+
+      <button id="process-btn" class="btn btn--primary btn--lg btn--full" disabled
+              aria-label="Process document">
+        <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        Analyse &amp; Summarise
+      </button>
+    </section>
+
+    <!-- Processing State -->
+    <section id="processing-section" class="section processing-section" hidden aria-live="polite">
+      <div class="processing__anim" aria-hidden="true">
+        <div class="spinner"></div>
+        <div class="spinner spinner--delay1"></div>
+        <div class="spinner spinner--delay2"></div>
+      </div>
+      <h2 class="processing__title" id="processing-title">Extracting text…</h2>
+      <p class="processing__sub" id="processing-sub">This may take a moment for large files</p>
+      <div class="progress-bar" role="progressbar" aria-label="Processing progress">
+        <div class="progress-bar__fill" id="progress-fill"></div>
+      </div>
+    </section>
+
+    <!-- Error State -->
+    <div id="error-banner" class="error-banner" hidden role="alert">
+      <span class="error-banner__icon" aria-hidden="true">⚠️</span>
+      <p class="error-banner__msg" id="error-msg"></p>
+      <button id="error-dismiss" class="btn btn--ghost btn--sm">Dismiss</button>
+    </div>
+
+    <!-- Results Section -->
+    <section id="results-section" class="section results-section" hidden aria-label="Summary results">
+
+      <!-- Meta bar -->
+      <div class="results-meta">
+        <div class="meta-chip" id="meta-type"></div>
+        <div class="meta-chip" id="meta-pages"></div>
+        <div class="meta-chip" id="meta-words"></div>
+        <div class="meta-chip" id="meta-reading"></div>
+        <button id="new-doc-btn" class="btn btn--ghost btn--sm">
+          ↩ New Document
+        </button>
+      </div>
+
+      <div class="results-grid">
+
+        <!-- Summary Card -->
+        <div class="card card--summary">
+          <div class="card__header">
+            <div class="card__title-row">
+              <span class="card__icon" aria-hidden="true">📄</span>
+              <h3 class="card__title">Summary</h3>
+            </div>
+            <div class="card__actions">
+              <!-- Re-summarize length -->
+              <div class="length-selector length-selector--sm" role="group" aria-label="Re-summarize length">
+                <input type="radio" id="rs-short"  name="rs-length" value="short"  class="visually-hidden" />
+                <label for="rs-short"  class="length-btn length-btn--xs">S</label>
+
+                <input type="radio" id="rs-medium" name="rs-length" value="medium" class="visually-hidden" checked />
+                <label for="rs-medium" class="length-btn length-btn--xs length-btn--active">M</label>
+
+                <input type="radio" id="rs-long"   name="rs-length" value="long"   class="visually-hidden" />
+                <label for="rs-long"   class="length-btn length-btn--xs">L</label>
+              </div>
+              <button id="resummary-btn" class="btn btn--ghost btn--sm"
+                      aria-label="Re-summarize with selected length">↻ Re-summarise</button>
+              <button id="copy-summary-btn" class="btn btn--ghost btn--sm"
+                      aria-label="Copy summary to clipboard">Copy</button>
+            </div>
+          </div>
+          <p class="card__body" id="summary-text"></p>
+        </div>
+
+        <!-- Key Points Card -->
+        <div class="card card--key-points">
+          <div class="card__header">
+            <div class="card__title-row">
+              <span class="card__icon" aria-hidden="true">🎯</span>
+              <h3 class="card__title">Key Points</h3>
+            </div>
+          </div>
+          <ul class="key-points-list" id="key-points-list" aria-label="Key points"></ul>
+        </div>
+
+        <!-- Suggestions Card -->
+        <div class="card card--suggestions">
+          <div class="card__header">
+            <div class="card__title-row">
+              <span class="card__icon" aria-hidden="true">💡</span>
+              <h3 class="card__title">Improvement Suggestions</h3>
+            </div>
+          </div>
+          <ul class="suggestions-list" id="suggestions-list" aria-label="Improvement suggestions"></ul>
+        </div>
+
+        <!-- Extracted Text Card -->
+        <div class="card card--extracted">
+          <div class="card__header">
+            <div class="card__title-row">
+              <span class="card__icon" aria-hidden="true">📃</span>
+              <h3 class="card__title">Extracted Text</h3>
+            </div>
+          </div>
+          <pre class="extracted-text" id="extracted-text"></pre>
+        </div>
+
+      </div><!-- /results-grid -->
+    </section>
+
+  </main>
+
+
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

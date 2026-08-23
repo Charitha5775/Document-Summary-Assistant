@@ -1,0 +1,10 @@
+{
+  "name": "doc-summary-assistant-frontend",
+  "version": "1.0.0",
+  "description": "DocSummary AI — Frontend (vanilla HTML/CSS/JS)",
+  "scripts": {
+    "start": "npx serve . --listen 3000 --cors",
+    "dev": "npx live-server --port=3000 --open=index.html"
+  },
+  "keywords": ["document", "summary", "ai", "pdf", "ocr"]
+}
