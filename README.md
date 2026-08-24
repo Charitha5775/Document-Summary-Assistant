@@ -57,6 +57,7 @@
 | Java | 17+ | [adoptium.net](https://adoptium.net) |
 | Maven | 3.8+ | [maven.apache.org](https://maven.apache.org) |
 | Tesseract | 5.x | [github.com/tesseract-ocr](https://github.com/tesseract-ocr/tesseract/releases) |
+| Node.js | 18+ | [nodejs.org](https://nodejs.org) |
 | OpenRouter Key | Free / Paid | [openrouter.ai](https://openrouter.ai/keys) |
 
 ---
@@ -102,15 +103,18 @@ mvn spring-boot:run -DskipTests
 
 The backend starts at **http://localhost:8080**
 
-### 4. Open the Frontend
-
-Simply serve the `frontend/` directory using any local static web server, or open `frontend/index.html` directly in your browser:
+### 4. Run the Frontend
 
 ```bash
-# Using Python to host locally
 cd frontend
-python -m http.server 3000
-# Open http://localhost:3000
+npm start
+```
+
+This hosts the frontend at **http://localhost:3000** using `npx serve`. 
+
+Alternatively, for auto-reload during development:
+```bash
+npm run dev
 ```
 
 ---

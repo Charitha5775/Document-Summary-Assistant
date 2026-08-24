@@ -10,8 +10,39 @@
 
 'use strict';
 
-// ── Configuration ─────────────────────────────────────────────────────────────
-const API_BASE_URL = 'http://localhost:8080';
+let API_BASE_URL = 'http://localhost:8080';
+
+// Dynamic config loader for server deployment
+async function loadConfig() {
+  try {
+    // 1. Try loading config.json first (highly compatible with static hosts like Netlify/Vercel)
+    const response = await fetch('config.json');
+    if (response.ok) {
+      const config = await response.json();
+      if (config.API_BASE_URL) {
+        API_BASE_URL = config.API_BASE_URL;
+        console.log('API Base URL loaded from config.json:', API_BASE_URL);
+        return;
+      }
+    }
+  } catch (err) {
+    // 2. Fallback to parsing .env file directly if config.json fails
+    try {
+      const response = await fetch('.env');
+      if (response.ok) {
+        const text = await response.text();
+        const match = text.match(/API_BASE_URL\s*=\s*(.+)/);
+        if (match && match[1]) {
+          API_BASE_URL = match[1].trim();
+          console.log('API Base URL loaded from .env:', API_BASE_URL);
+          return;
+        }
+      }
+    } catch (envErr) {
+      console.warn('Config fetch failed, using default API base URL:', API_BASE_URL);
+    }
+  }
+}
 
 // ── DOM References ────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -55,7 +86,8 @@ let lastExtractedText = '';
 let dragCounter       = 0;  // tracks nested dragenter/dragleave to avoid flicker
 
 // ── Initialisation ────────────────────────────────────────────────────────────
-(function init() {
+(async function init() {
+  await loadConfig();
   bindEvents();
 })();
 
