@@ -177,17 +177,38 @@ This application utilizes a decoupled, modern architecture: a Java Spring Boot R
 
 ## Deployment
 
-### Backend (Render.com)
-1. Create a new **Web Service** on [render.com](https://render.com)
-2. Set **Build Command**: `cd backend && mvn package -DskipTests`
-3. Set **Start Command**: `java -jar backend/target/doc-summary-assistant-1.0.0.jar`
-4. Add environment variables in Render's dashboard:
-   - `OPENROUTER_API_KEY` = `<your_key>`
+### Backend (Render.com — Web Service)
+1. Create a new **Web Service** on [render.com](https://render.com).
+2. Select **Python** or **Node** as the Runtime (since Render lacks a native Java 17 dropdown environment).
+3. Set the **Root Directory** to `backend`.
+4. Set the **Build Command** to:
+   ```bash
+   curl -sL https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8.1%2B1/OpenJDK17U-jdk_x64_linux_hotspot_17.0.8.1_1.tar.gz -o jdk.tar.gz && tar -xzf jdk.tar.gz && export JAVA_HOME=$PWD/jdk-17.0.8.1+1 && export PATH=$JAVA_HOME/bin:$PATH && ./mvnw clean package -DskipTests
+   ```
+5. Set the **Start Command** to:
+   ```bash
+   export JAVA_HOME=$PWD/jdk-17.0.8.1+1 && export PATH=$JAVA_HOME/bin:$PATH && java -jar target/doc-summary-assistant-1.0.0.jar
+   ```
+6. Add environment variables in the Render settings:
+   - `OPENROUTER_API_KEY` = `<your_openrouter_api_key>`
    - `OPENROUTER_MODEL` = `stealth/ox-alpha`
 
-### Frontend (Netlify / Vercel)
-1. Deploy the `frontend/` folder to your static provider of choice.
-2. Update the `API_BASE_URL` in `frontend/app.js` to point to your live backend endpoint.
+### Frontend (Render.com — Static Site)
+1. Create a new **Static Site** on [render.com](https://render.com).
+2. Set the **Root Directory** to `frontend`.
+3. Set the **Build Command** to:
+   ```bash
+   npm install
+   ```
+   *(Or leave blank/use `clear` if you don't need npm packages installed)*
+4. Set the **Publish Directory** to:
+   ```text
+   .
+   ```
+5. *(Optional)* Add the environment variable `API_BASE_URL` with your deployed backend URL, and update the **Build Command** to write it to the static configuration at build time:
+   ```bash
+   npm install && echo "{\"API_BASE_URL\":\"$API_BASE_URL\"}" > config.json
+   ```
 
 ---
 
